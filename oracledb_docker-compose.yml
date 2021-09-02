@@ -1,0 +1,33 @@
+version: "2.4"
+    
+services:
+  oracledb:
+    image: oracle/database:19.3.0-ee 
+    container_name: hid-oracle-db-19.3
+    hostname: hid-oracle-db-19.3
+    volumes:
+      - ora_db_data:/opt/oracle/oradata
+      - /etc/localtime:/etc/localtime:ro
+      #  - [PATH_TO]/post-setup-scripts:/opt/oracle/scripts/setup
+    restart: always
+    environment:
+      - ORACLE_SID=${ORACLE_SID}
+      - ORACLE_PDB=${ORACLE_PDB}
+      - ORACLE_PWD=${ORACLE_PWD}
+      - ORACLE_EDITION=${ORACLE_EDITION}
+      - ORACLE_CHARACTERSET=${ORACLE_CHARACTERSET}
+      - ENABLE_ARCHIVELOG=${ENABLE_ARCHIVELOG}
+      # - INIT_SGA_SIZE=${INIT_SGA_SIZE}
+      # - INIT_PGA_SIZE=${INIT_PGA_SIZE}
+    ports:
+      - "${ORACLE_LISTENER_PORT}:1521"
+      - "${OEM_EXPRESS_PORT}:5500"
+    
+volumes:
+  ora_db_data:
+
+    # Note:
+    
+    # SHOW PARAMETER MAX_STRING_SIZE; STANDARD | EXTENDED
+    # SELECT UTL_INADDR.get_host_address from dual;
+    # sqlplus sys/"123456"@//localhost:1521/XE as sysdba
